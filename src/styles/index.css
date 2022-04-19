@@ -1,4 +1,11 @@
 :root {
+    --bodyBgColor: hsl(235, 10%, 75%);
+    --itemBgColor: hsl(10, 25%, 90%);
+
+    --menuSize: 3em;
+    --itemShadow: 2px 2px 10px 1px hsla(0, 0%, 0%, 0.16);
+    --itemTransition: transform ease-in-out;
+
     font-size: 62.5%;
 }
 
@@ -26,10 +33,104 @@ body {
 }
 
 body {
-    background-color: hsl(235, 10%, 75%);
+    background-color: var(--bodyBgColor);
 
     font-size: 1.6rem;
 
+    overflow: hidden;
+
     display: grid;
     place-items: center;
+}
+
+a,
+label {
+    cursor: pointer;
+}
+
+.nav-radial {
+    width: var(--menuSize);
+    height: var(--menuSize);
+
+    font-size: 8rem;
+
+    isolation: isolate;
+
+    display: grid;
+    place-items: stretch;
+
+    position: relative;
+}
+
+.nav-radial__hidden-toggler {
+    border-radius: 100%;
+    outline: unset;
+
+    appearance: unset;
+}
+
+.nav-radial__hidden-toggler:checked ~ .nav-radial__toggler {
+    --rotate: 0deg;
+}
+
+.nav-radial__toggler {
+    --rotate: -315deg;
+    --filter: unset;
+
+    border-radius: 100%;
+
+    background-color: var(--itemBgColor);
+
+    font-size: 1em;
+    font-weight: bolder;
+
+    z-index: 1;
+    filter: var(--filter);
+    box-shadow: var(--itemShadow);
+
+    display: grid;
+    place-items: center;
+
+    position: absolute;
+    inset: 0;
+
+    transition: inset, filter;
+    transition-duration: 250ms;
+}
+
+.nav-radial__toggler:hover,
+.nav-radial__hidden-toggler:focus-visible ~ .nav-radial__toggler {
+    inset: -7.5px -5px;
+}
+
+.nav-radial__hidden-toggler:focus-visible ~ .nav-radial__toggler {
+    outline-style: auto;
+    outline-offset: 0;
+}
+
+.nav-radial__toggler:hover:active,
+.nav-radial__hidden-toggler:active ~ .nav-radial__toggler {
+    --rotate: -300deg;
+    --filter: brightness(1.1);
+    --transitionDuration: 100ms;
+}
+
+.nav-radial__hidden-toggler:checked ~ .nav-radial__toggler:hover:active,
+.nav-radial__hidden-toggler:checked:active ~ .nav-radial__toggler {
+    --rotate: -15deg;
+    --filter: brightness(0.9);
+}
+
+.nav-radial__toggler::before {
+    --rotate: inherit;
+
+    content: '\2715';
+
+    line-height: 1;
+
+    transform: rotate(var(--rotate));
+    transform-origin: center;
+
+    transition: var(--itemTransition);
+    transition-duration: var(--transitionDuration, 1000ms);
 }
