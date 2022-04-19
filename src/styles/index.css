@@ -3,7 +3,11 @@
     --itemBgColor: hsl(10, 25%, 90%);
 
     --menuSize: 3em;
+    --itemCount: 8;
+    --itemSize: calc(var(--menuSize) * 0.75);
     --itemShadow: 2px 2px 10px 1px hsla(0, 0%, 0%, 0.16);
+    --itemTransitionDuration: 200ms;
+    --itemTransitionDelay: 100ms;
     --itemTransition: transform ease-in-out;
 
     font-size: 62.5%;
@@ -132,5 +136,186 @@ label {
     transform-origin: center;
 
     transition: var(--itemTransition);
-    transition-duration: var(--transitionDuration, 1000ms);
+    transition-duration: var(
+        --transitionDuration,
+        calc(var(--itemTransitionDuration) * var(--itemCount))
+    );
 }
+
+.nav-radial__list {
+    font-size: 1em;
+
+    list-style-type: none;
+    isolation: isolate;
+
+    display: grid;
+    place-items: center;
+
+    position: absolute;
+    inset: 0;
+}
+
+.nav-radial__hidden-toggler:checked
+    ~ .nav-radial__list
+    .nav-radial__list__item {
+    --translateX: calc(var(--pointOrigin) * -1 + var(--itemSize) / 2);
+    --rotate: calc(360deg / 8 * var(--i));
+    --pointerEvents: unset;
+}
+
+.nav-radial__hidden-toggler:not(:checked)
+    ~ .nav-radial__list
+    .nav-radial__list__item {
+    --visibility: hidden;
+}
+
+.nav-radial__list__item {
+    --pointOrigin: min(100vmin / 2 - 5vmin, var(--menuSize) + var(--itemSize));
+    --translateX: 0;
+    --rotate: 0deg;
+    --visibility: unset;
+    --pointerEvents: revert;
+
+    width: var(--itemSize);
+    height: var(--itemSize);
+
+    border-radius: 100%;
+
+    background-color: var(--itemBgColor);
+
+    z-index: calc(var(--itemCount) - var(--i));
+    box-shadow: var(--itemShadow);
+    visibility: var(--visibility);
+    pointer-events: var(--pointerEvents);
+
+    position: absolute;
+
+    transform: translateX(var(--translateX)) rotate(var(--rotate));
+    transform-origin: var(--pointOrigin);
+
+    /* prettier-ignore */
+    transition:
+        var(--itemTransition),
+        width,
+        height,
+        visibility
+    ;
+    /* prettier-ignore */
+    transition-duration:
+        var(--itemTransitionDuration),
+        250ms,
+        250ms
+    ;
+    /* prettier-ignore */
+    transition-delay:
+        calc(var(--itemTransitionDelay) * var(--i)),
+        0ms,
+        50ms
+    ;
+}
+
+.nav-radial__list__item:hover,
+.nav-radial__list__item:focus-within {
+    width: calc(var(--itemSize) * 1.1);
+    height: calc(var(--itemSize) * 1.1);
+}
+
+.nav-radial__list__item__link {
+    --i: inherit;
+
+    height: inherit;
+
+    border-radius: inherit;
+
+    text-decoration: unset;
+
+    display: grid;
+    place-items: center;
+}
+
+.nav-radial__list__item__link::before {
+    --i: inherit;
+
+    content: '';
+
+    line-height: 1;
+
+    transform: rotate(calc(var(--rotate) * -1));
+    transition: var(--itemTransition);
+    transition-duration: calc(
+        var(--itemTransitionDuration) * calc(var(--i) - 0.5)
+    );
+    transition-delay: var(--itemTransitionDelay);
+}
+
+/* #region FOR */
+
+.nav-radial__list__item:nth-of-type(1) {
+    --i: 0;
+}
+
+.nav-radial__list__item:nth-of-type(2) {
+    --i: 1;
+}
+
+.nav-radial__list__item:nth-of-type(3) {
+    --i: 2;
+}
+
+.nav-radial__list__item:nth-of-type(4) {
+    --i: 3;
+}
+
+.nav-radial__list__item:nth-of-type(5) {
+    --i: 4;
+}
+
+.nav-radial__list__item:nth-of-type(6) {
+    --i: 5;
+}
+
+.nav-radial__list__item:nth-of-type(7) {
+    --i: 6;
+}
+
+.nav-radial__list__item:nth-of-type(8) {
+    --i: 7;
+}
+
+/* #endregion FOR */
+
+/* #region ICONS */
+
+:nth-of-type(1) .nav-radial__list__item__link::before {
+    content: '\265F';
+}
+
+:nth-of-type(2) .nav-radial__list__item__link::before {
+    content: '\26C3';
+}
+
+:nth-of-type(3) .nav-radial__list__item__link::before {
+    content: '\26f8';
+}
+
+:nth-of-type(4) .nav-radial__list__item__link::before {
+    content: '\260e';
+}
+
+:nth-of-type(5) .nav-radial__list__item__link::before {
+    content: '\26f4';
+}
+
+:nth-of-type(6) .nav-radial__list__item__link::before {
+    content: '\265e';
+}
+
+:nth-of-type(7) .nav-radial__list__item__link::before {
+    content: '\265B';
+}
+
+:nth-of-type(8) .nav-radial__list__item__link::before {
+    content: '\265A';
+}
+
+/* #endregion ICONS */
